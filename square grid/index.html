@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>square grid</title>
+	<style type="text/css">
+		#main{
+			width: 100vh;
+			height: 100vh;
+			margin: 0 auto;
+		}
+		body{
+			background-color: #20232a;
+		}
+	</style>
+</head>
+<body>
+	<div id='main'>
+		<svg width="100vh" height="100vh" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+		</svg>
+	</div>
+	<script type="text/javascript" src="./Queue.js"></script>
+	<script>
+		class Node{
+			constructor(index,path){
+				this.index=index;
+				this.lastVisited=0;
+				this.path=path;
+			}
+			shouldAnimate(){
+				if(Date.now()-this.lastVisited>6500)
+					return true;
+				return false;
+			}
+		}
+	</script>
+	<script>
+		const svg=document.querySelector('svg');
+		const hor=[];
+		const ver=[];
+		let loadTime=0;
+		const stroke='#3e4552';
+		const newStroke='#2ed2ff';
+		window.onload=()=>{
+			loadTime=Date.now();
+		}
+		for(let i=0;i<11;i++){
+			for(let j=0;j<10;j++){
+				const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+				path.setAttribute('d', `M ${10*j} ${10*i} h 10`);
+				path.setAttribute('stroke',stroke);
+				path.setAttribute('stroke-width','1');
+				svg.appendChild(path);
+				// if(i!=10)
+					hor.push(path);
+			}
+		}
+		for(let i=0;i<11;i++){
+			for(let j=0;j<10;j++){
+				const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+				path.setAttribute('d', `M ${10*i} ${10*j} v 10`);
+				path.setAttribute('stroke',stroke);
+				path.setAttribute('stroke-width','1');
+				svg.appendChild(path);
+				// if(i!=10)
+					ver.push(path);
+			}
+		}
+		const adj=new Array(220);
+		for(let i=0;i<hor.length;i++){
+			adj[i]=[];
+			if(i>10){
+				const index= (i%10)*10+(Math.floor(i/10)-1);
+				adj[i].push(new Node(110+index,ver[index]));
+				adj[i].push(new Node(110+index+10,ver[index+10]));
+			}
+			if(i%10!==0){
+				adj[i].push(new Node(i-1,hor[i-1]));
+			}
+			
+			if((i+1)%10!==0){
+				adj[i].push(new Node(i+1,hor[i+1]));
+				// adj[i].push()
+			}
+			if(i<100){
+				const index=(i%10)*10+(Math.floor(i/10)-1)+1;
+				adj[i].push(new Node(110+index,ver[index]));
+				adj[i].push(new Node(110+index+10,ver[index+10]));	
+			}
+
+		}
+		for(let i=110;i<110+ver.length;i++){
+			let j=i-110;
+			adj[i]=[];
+			if(j>10){
+				const index= (j%10)*10+(Math.floor(j/10)-1);
+				adj[i].push(new Node(index,hor[index]));
+				adj[i].push(new Node(index+10,hor[index+10]));
+			}
+			if(i%10!==0){
+				adj[i].push(new Node(i-1,ver[j-1]));
+			}
+			if((i+1)%10!==0){
+				adj[i].push(new Node(i+1,ver[j+1]));
+				// adj[i].push()
+			}
+			if(j<100){
+				const index= (j%10)*10+(Math.floor(j/10)-1)+1;
+				adj[i].push(new Node(index,hor[index]));
+				adj[i].push(new Node(index+10,hor[index+10]));
+			}
+		}
+		console.log(adj[157]);
+		const main=document.getElementById('main');
+		const mainStyle=getComputedStyle(main);
+		const mainWidth=parseInt(mainStyle.getPropertyValue('width'));
+		main.addEventListener('click',clickPosition);
+		function clickPosition(e){
+			const column=Math.floor((e.offsetX/mainWidth)/(100/110)*10);			
+			const row=Math.floor((e.offsetY/mainWidth)/(100/110)*10);
+			console.log(row,column);
+			if(row<10 && column<10){
+				const hIndex=10*row+column;
+				const vIndex=10*column+row;
+				// hor[hIndex].setAttribute('stroke','red');
+				// hor[hIndex+10].setAttribute('stroke','red');
+				// ver[vIndex].setAttribute('stroke','blue');
+				// ver[vIndex+10].setAttribute('stroke','blue');
+				startAnimation(hIndex,vIndex);
+			}
+		}
+		const queue=new Queue();
+		function startAnimation(hIndex,vIndex){
+			setAnimation(hor[hIndex],newStroke,()=>{});
+			setAnimation(hor[hIndex+10],newStroke,()=>{});
+			setAnimation(ver[vIndex],newStroke,()=>{});
+			setAnimation(ver[vIndex+10],newStroke,()=>{});
+			// console.log(adj[78]);
+			queue.erase();
+			queue.enqueue(adj[110+vIndex][4].index);
+			queue.enqueue(adj[110+vIndex][5].index)
+			propagateAnimation();
+		}
+		function propagateAnimation(){
+			const currIndex=queue.dequeue();
+			if(currIndex){
+				adj[currIndex].map((node)=>{
+					if(node.shouldAnimate()){
+						node.lastVisited=Date.now();
+						queue.enqueue(node.index);
+						setAnimation(node.path,newStroke,()=>{
+							propagateAnimation();
+						});
+					}
+				})
+			}
+		}
+		function setAnimation(path,color,callback){
+			const animate=document.createElementNS('http://www.w3.org/2000/svg','animate');
+			animate.setAttribute('attributeName','stroke');
+			animate.setAttribute('dur','0.6s');
+			animate.setAttribute('repeatCount','1');
+			animate.setAttribute('values',`${stroke};${color}`);
+			animate.setAttribute('begin',`${Date.now()-loadTime}ms`);
+			path.appendChild(animate);
+			setTimeout(()=>{
+				callback();
+			},200)
+			setTimeout(()=>{
+				path.removeChild(animate);
+			},600)
+		}
+	</script>
+</body>
+</html>

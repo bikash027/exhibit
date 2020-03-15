@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>svg</title>
+	<style type="text/css">
+		body{
+			margin:0;
+		}
+		@keyframes rotation{
+			0%{
+				transform: rotate(0deg);
+			}
+			100%{
+				transform: rotate(360deg);
+			}
+		}
+		@keyframes dropping{
+			100%{
+				top:100vh;
+			}
+		}
+		.rotate{
+			animation-name: rotation,dropping;
+			animation-duration: 15s,30s;
+			animation-timing-function: linear,linear;
+			animation-iteration-count: 2,1;
+		}
+		#main{
+			position:relative;
+			margin-top: 10vh;
+			height:80vh;
+			width: 100vw;
+			overflow:hidden;
+		}
+		svg{
+			filter:blur(5px);
+		}
+	</style>
+</head>
+<body style="background-color: #282c34;">
+	<div id='hiddenDiv'>
+		<svg width="60vh" height="60vh" viewBox="180 130 910 870" xmlns="http://www.w3.org/2000/svg">
+			<path d="M540 509L642 458L590 430V376L642 353L606 300V194L642 146L674 194V300L642 353L695 376V430L642 458L746 509V458L797 430L851 458L883 404L969 353H1033L1003 404L915 458H851V509L797 539L746 509V613L797 586L851 613V668H915L1003 718L1033 772H969L883 724L851 668L797 694L746 668V613L642 663L695 694V748L642 772L674 828V928L642 980L606 928V828L642 772L590 748V694L642 663L540 613V668L487 694L435 668L406 718L315 772H253L284 718L372 668H435V613L487 586L540 613V509L487 539L435 509V458H372L284 404L253 353H315L406 404L435 458L487 430L540 458V509Z" 
+			stroke="#ECD34F" stroke-width="15" fill="#EFCA06" />
+		</svg>
+	</div>
+	<div id='main'>
+		<div></div>	<div></div>	<div></div>	<div></div>	<div></div>	<div></div>	<div></div>	<div></div>	<div></div>	<div></div>	<div></div>	<div></div>	<div></div>	<div></div>	<div></div>	<div></div>	<div></div>	<div></div> <div></div>	<div></div>
+
+	</div>
+	<script type="text/javascript">
+		const hiddenDiv=document.querySelector('#hiddenDiv');
+		hiddenDiv.style.display='none';
+		const main=document.querySelector('#main').children;
+		const ar=[9,12,15,18,21,24];
+		const reuse=function(svg){
+			const ran=Math.floor(Math.random()*6);
+			svg.classList.toggle('rotate');
+			svg.style.zIndex=(2*ran+2)+'';
+			svg.style.top=(-ar[ran]-10)+'vh';
+			svg.style.left=Math.floor(Math.random()*95)+'vw';
+			svg.style.width=ar[ran]+'vh';
+			svg.style.height=ar[ran]+'vh';
+			svg.style.filter='blur('+ran/2+'px)';
+			const time=(24/ar[ran])*24;
+			svg.style.animationDuration="30s,"+time+"s";
+			svg.style.animationIterationCount=(time/30)+',1';
+			svg.style.animationDelay=svg.delay+'s';
+			svg.classList.toggle('rotate');
+			svg.delay+=time;
+			setTimeout(function(){
+				reuse(svg);
+			},1000*time);
+		}
+		for(let i=0;i<20;i++){
+			main[i].innerHTML=hiddenDiv.innerHTML;
+			console.log(i);
+			const svg=main[i].lastElementChild;
+			svg.classList.add('rotate');
+			svg.style.position='absolute';
+			svg.delay=0;
+			reuse(svg);
+			main[i].style.position='relative';
+		}
+	</script>
+</body>
+</html>
+
+
+
+
