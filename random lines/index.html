@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>random lines</title>
+	<style type="text/css">
+		body{
+			margin: 0;
+			height: 100vh;
+			width: 100vw;
+		}
+		svg{
+			background-color: white;
+		}
+	</style>
+</head>
+<body>
+	<svg width="100vw" height="100vh" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+		<path id="first" d="M 0 20 H 80" stroke-width="1" stroke='#ECD34F' />
+		<path d="M 10 30 H 80" stroke-width="1" stroke='#ECD34F' />
+	</svg>
+<script type="text/javascript">
+	class Path{
+		constructor(svg,field){
+			this.path=document.createElementNS('http://www.w3.org/2000/svg','path');
+			this.path.setAttribute('stroke-width','1');
+			this.setStroke();
+			this.path.setAttribute('fill','transparent');
+			const WorH_ar=['top','right','bottom','left'];
+			const WorH=WorH_ar[Math.floor(Math.random()*4)];
+			this.coordinates=[];
+			switch(WorH){
+				case 'top':
+					field.randomTopCell(this.coordinates); break;
+				case 'right':
+					field.randomRightCell(this.coordinates); break;
+				case 'bottom':
+					field.randomBottomCell(this.coordinates); break;
+				case 'left':
+					field.randomLeftCell(this.coordinates); break;
+			}
+			if(this.coordinates.length===0)
+				return undefined;
+			let current;
+			let last;
+			for(let i=0;true;i++){
+				current=this.coordinates[this.coordinates.length-1];
+				const newCell=field.randomAdjacentCell(current,last);
+				last=current;
+				if(newCell)	this.coordinates.push(newCell);
+				else break;
+			}
+			this.attributes();
+			svg.appendChild(this.path);
+			return this.path;
+		}
+		attributes(){
+			const coors=this.coordinates;
+			let d=`M${coors[0][1]*5} ${coors[0][0]*5}`;
+			for(let i=1;i<coors.length;i++){
+				d=d+`L${coors[i][1]*5} ${coors[i][0]*5}`;
+			}
+			this.path.setAttribute('d',d);
+			// this.path.setAttribute('stroke-width','1');
+			// this.path.setAttribute('stroke','black');
+		}
+		setStroke(){
+			const color={
+				r: Math.floor(Math.random()*256),
+				g: Math.floor(Math.random()*256),
+				b: Math.floor(Math.random()*256)
+			}
+			this.path.setAttribute('stroke',`rgb(${color.r},${color.g},${color.b})`)
+		}
+	}
+</script>
+<script type="text/javascript">
+	class Field{
+		constructor(width,height){
+			this.grid=[];
+			for(let i=0;i<height;i++){
+				this.grid.push([]);
+				for(let j=0;j<width;j++)
+					this.grid[i].push(false);
+			}
+		}
+		randomTopCell(coordinates){
+			const free=[];
+			for(let i=0;i<this.grid[0].length;i++){
+				if(!this.grid[0][i])
+					free.push(i);
+			}
+			if(free.length===0) return;
+			const index=Math.floor(Math.random()*free.length);
+			coordinates.push([0,free[index]]);
+			this.grid[0][free[index]]=true;
+		}
+		randomRightCell(coordinates){
+			const free=[];
+			const width=this.grid[0].length;
+			for(let i=0;i<this.grid.length;i++){
+				if(!this.grid[i][width-1])
+					free.push(i);
+			}
+			if(free.length===0) return;
+			const index=Math.floor(Math.random()*free.length);
+			coordinates.push([free[index],width-1]);
+			this.grid[free[index]][width-1]=true;
+		}
+		randomBottomCell(coordinates){
+			const free=[];
+			const height=this.grid.length;
+			for(let i=0;i<this.grid[0].length;i++){
+				if(!this.grid[height-1][i])
+					free.push(i);
+			}
+			if(free.length===0) return;
+			const index=Math.floor(Math.random()*free.length);
+			coordinates.push([height-1,free[index]]);
+			this.grid[height-1][free[index]]=true;
+		}
+		randomLeftCell(coordinates){
+			const free=[];
+			for(let i=0;i<this.grid.length;i++){
+				if(!this.grid[i][0])
+					free.push(i);
+			}
+			if(free.length===0) return;
+			const index=Math.floor(Math.random()*free.length);
+			coordinates.push([free[index],0]);
+			this.grid[free[index]][0]=true;
+		}
+		randomAdjacentCell(cell,lastCell){
+			const adjCells=[];
+			const r=cell[0]; const c=cell[1]; const grid=this.grid;
+			const width=grid[0].length; const height=this.grid.length;
+			if(r-1>=0 && c-1>=0 && !grid[r-1,c-1])
+				adjCells.push([r-1,c-1]);
+
+			if(r-1>=0 && !grid[r-1,c])
+				adjCells.push([r-1,c]);
+
+			if(r-1>=0 && c+1<width && !grid[r-1][c+1])
+				adjCells.push([r-1,c+1]);
+
+			if(c+1<width && !grid[r][c+1])
+				adjCells.push([r,c+1]);
+
+			if(r+1<height && c+1<width && !grid[r+1][c+1])
+				adjCells.push([r+1,c+1]);
+
+			if(r+1<height && !grid[r+1][c])
+				adjCells.push([r+1,c]);
+
+			if(r+1<height && c-1>=0 && !grid[r+1][c-1])
+				adjCells.push([r+1,c-1]);
+
+			if(c-1>=0 && !grid[r][c-1])
+				adjCells.push([r,c-1]);
+
+			if(adjCells.length===0)
+				return undefined;
+			if(lastCell){
+				const direction=[cell[0]-lastCell[0],cell[1]-lastCell[1]];
+				const fCell=[cell[0]+direction[0],cell[1]+direction[1]];
+				if(fCell[0]<height && fCell[0]>=0 && fCell[1]<width && fCell[1]>=0)
+					if(!grid[fCell[0]][fCell[1]])
+						for(let i=0;i<20;i++)
+							adjCells.push(fCell);
+			}
+			const index=Math.floor(Math.random()*adjCells.length);
+			const rc=adjCells[index];
+			grid[rc[0]][rc[1]]=true;
+			return rc;
+		}
+	}
+</script>
+<script type="text/javascript">
+	// const firstPath=document.querySelector('#first');
+	// firstPath.style.visibility='hidden';
+	const svg=document.querySelector('svg');
+	const styles=getComputedStyle(svg);
+	const width=Math.floor(parseInt(styles.getPropertyValue('width'))/5);
+	const height=Math.floor(parseInt(styles.getPropertyValue('height'))/5);
+	console.log(width,height);
+	svg.setAttribute('viewBox',`0 0 ${width*5} ${height*5}`);
+	const field=new Field(width,height);
+	for(let i=0;i<100;i++){
+		const path=new Path(svg,field);
+		if(!path)
+			break;
+	}
+</script>
+</body>
+</html>

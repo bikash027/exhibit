@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>torch</title>
+	<style type="text/css">
+		#inner{
+			position: relative;
+			top: -50vh;left: -50vh;
+			width: 200vh;
+			height: 200vh;
+		}
+		#outer{
+			margin: 0 auto;
+			width: 100vh;
+			height: 100vh;
+			overflow: hidden;
+		}
+		body{
+			margin: 0;
+		}
+		img{
+			position: absolute;
+			top: 0;
+			left: 50%;
+			transform: translate(-50%,0%);
+			width: 100vh;
+			z-index: -2;
+		}
+	</style>
+</head>
+<body>
+	<div id="outer">
+		<div id="inner" style="">
+			<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+				<path d="M50 1 H 1 V 99 H 99 V 1 H 50 L 50 40 C 55.5228474 40, 60 44.4771526, 60 50 S 55.5228474 60, 50 60 S 40 55.5228474, 40 50 S 44.4771526 40, 50 40" stroke-width="0" fill="black" opacity="0.95"/>
+			</svg>
+		</div>
+	</div>
+	<!-- <div > -->
+		<img src="forest.jpg">
+	<!-- </div> -->
+	<script type="text/javascript">
+		const svg=document.querySelector('#inner');
+		const body=document.querySelector('body');
+		const initMousePos={};
+		let shouldMove=false;
+		function handleMouseDown(e){
+			initMousePos.x=e.clientX;
+			initMousePos.y=e.clientY;
+			shouldMove=true;
+			svg.removeEventListener('mouseenter',handleMouseDown);
+			console.log(initMousePos);
+		}
+		svg.addEventListener('mouseenter',handleMouseDown);
+		const svgStyle=getComputedStyle(svg);
+		const initTop=parseFloat(svgStyle.getPropertyValue('top'));
+		const initLeft=parseFloat(svgStyle.getPropertyValue('left'));
+		body.addEventListener('mousemove',(e)=>{
+			if(shouldMove){
+				svg.style.top= (initTop+(e.clientY-initMousePos.y))+'px';
+				svg.style.left= (initLeft+(e.clientX-initMousePos.x))+'px';
+			}
+		})
+		body.addEventListener('mouseleave',(e)=>{
+			svg.style.top= initTop+'px';
+			svg.style.left=initLeft+'px';
+			shouldMove=false;
+			svg.addEventListener('mouseenter',handleMouseDown);
+		})
+	</script>
+</body>
+</html>
