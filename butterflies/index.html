@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>butterflies</title>
+	<style type="text/css">
+		div{
+			display: block;
+			position: absolute;
+			width: 20vh;
+			height: 20vh;
+			transform: translate(-50%, -50%);
+		}
+		body{
+			margin: 0;
+			width:  100vw;
+			height: 100vh;
+			background-color: white;
+			overflow: hidden;
+		}
+	</style>
+</head>
+<body>
+	<div style="display: none;">
+		<svg width="20vh" height="20vh" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
+		 style="background-color: transparent;">
+			 <circle cx="50" cy="10" r="2.5" fill="#EFCA06"/>
+			<path stroke="#EFCA06" stroke-width="0.1" fill="transparent" d="M 42 2 q 4 2, 8 8 q 4 -6, 8 -8 "/>
+			<path  fill="#CCCCCC" d="M 50 13 c 0 0, 14 -14, 20 -10 s 8 10, 8 20 s -8 20,-8 20 c 0 0, 8 12, 2 16 s -22 -16, -22 -16">
+				<animate attributeName="d" dur="0.4s" repeatCount='indefinite'
+				values=
+				"M 50 13 c 0 0, 14 -14, 20 -10 s 8 10, 8 20 s -8 20,-8 20 c 0 0, 8 12, 2 16 s -22 -16, -22 -16;
+				M 50 13 c 0 0, 7 -14, 10 -10 s 4 10, 4 20 s -4 20,-4 20 c 0 0, 4 12, 1 16 s -11 -16, -11 -16;
+				M 50 13 c 0 0, 3.5 -14, 5 -10 s 2 10, 2 20 s -2 20,-2 20 c 0 0, 2 12, 0.5 16 s -5.5 -16, -5.5 -16;
+				M 50 13 c 0 0, 14 -14, 20 -10 s 8 10, 8 20 s -8 20,-8 20 c 0 0, 8 12, 2 16 s -22 -16, -22 -16;
+				M 50 13 c 0 0, 7 -14, 10 -10 s 4 10, 4 20 s -4 20,-4 20 c 0 0, 4 12, 1 16 s -11 -16, -11 -16;
+				M 50 13 c 0 0, 14 -14, 20 -10 s 8 10, 8 20 s -8 20,-8 20 c 0 0, 8 12, 2 16 s -22 -16, -22 -16;"
+				/>
+				<!-- <animate attributeName="fill" dur="0.4s" repeatCount="indefinite"
+				values="#CCCCCC; #BBBBBB; #AAAAAA; #CCCCCC; #DDDDDD; #CCCCCC" /> -->
+			</path>
+			<path  fill="#CCCCCC" d="M 50 13 c 0 0, -14 -14, -20 -10 s -8 10, -8 20 s 8 20,8 20 c 0 0, -8 12, -2 16 s 22 -16, 22 -16">
+				<animate attributeName="d" dur="0.4s" repeatCount='indefinite'
+				values=
+				"M 50 13 c 0 0, -14 -14, -20 -10 s -8 10, -8 20 s 8 20,8 20 c 0 0, -8 12, -2 16 s 22 -16, 22 -16;
+				M 50 13 c 0 0, -7 -14, -10 -10 s -4 10, -4 20 s 4 20,4 20 c 0 0, -4 12, -1 16 s 11 -16, 11 -16;
+				M 50 13 c 0 0, -3.5 -14, -5 -10 s -2 10, -2 20 s 2 20,2 20 c 0 0, -2 12, -0.5 16 s 5.5 -16, 5.5 -16;
+				M 50 13 c 0 0, -14 -14, -20 -10 s -8 10, -8 20 s 8 20,8 20 c 0 0, -8 12, -2 16 s 22 -16, 22 -16;
+				M 50 13 c 0 0, -7 -14, -10 -10 s -4 10, -4 20 s 4 20,4 20 c 0 0, -4 12, -1 16 s 11 -16, 11 -16;
+				M 50 13 c 0 0, -14 -14, -20 -10 s -8 10, -8 20 s 8 20,8 20 c 0 0, -8 12, -2 16 s 22 -16, 22 -16"
+				/>
+				<!-- <animate attributeName="fill" dur="0.4s" repeatCount="indefinite"
+				values="#CCCCCC; #BBBBBB; #AAAAAA; #CCCCCC; #DDDDDD; #CCCCCC" /> -->
+			</path>
+			<ellipse cx="50" cy="28" rx="1" ry="18" fill="#EFCA06"/>
+		</svg>
+	</div>
+	<script type="text/javascript">
+		var speed=5;
+		const body=document.querySelector('body');
+		const styles= getComputedStyle(body);
+		const width= parseInt(styles.getPropertyValue('width'));
+		const height= parseInt(styles.getPropertyValue('height'));
+		const svg=document.querySelector('div').innerHTML;
+		function startTransition(img){
+			const randomAngle= 2*Math.PI*Math.random();
+			img.vx=3*Math.cos(randomAngle);
+			img.vy=3*Math.sin(randomAngle);
+			const randomAngle_d=450-randomAngle*180/Math.PI;
+			img.style.transform=`translate(-50%, -50%) rotate(${randomAngle_d}deg)`;
+			let vt;
+			vt=setInterval(()=>{
+				const x= parseFloat(img.style.left);
+				const y= parseFloat(img.style.top);
+				img.style.left= (x+img.vx)+'px';
+				img.style.top= (y-img.vy)+'px';
+			},100);
+			let at;
+			at=setInterval(()=>{
+				const x= parseFloat(img.style.left);
+				const y= parseFloat(img.style.top);
+				if(x<0 || y<0 || x>width || y>height){
+					body.removeChild(img);
+					clearInterval(vt);
+					clearInterval(at);
+				}
+				const change= Math.random()*0.5-0.25;
+				let angle;
+				if(img.vx!==0){
+					angle= Math.atan(img.vy/img.vx);
+					if(img.vx<0)
+						angle=angle+ Math.PI;
+					else if(img.vx>0 && img.vy<0)
+						angle=angle+ 2*Math.PI;
+				}
+				else if(img.vy>0)
+					angle=Math.PI/2;
+				else
+					angle=3*Math.PI/2;
+				angle+=change;
+				img.vx=speed*Math.cos(angle);
+				img.vy=speed*Math.sin(angle);
+				const angle_d=450-angle*180/Math.PI;
+				img.style.transform=`translate(-50%, -50%) rotate(${angle_d}deg)`;
+			},500);
+		}
+		body.addEventListener('click',e=>{
+			console.log(e.clientX, e.clientY);
+			const img=document.createElement('div');
+			// img.setAttribute('src','./butterfly.svg');
+			img.innerHTML=svg;
+			img.style.display='block';
+			img.style.top=e.clientY+'px';
+			img.style.left=e.clientX+'px';
+			const paths= img.lastElementChild.children;
+			const color={
+				r: Math.floor(Math.random()*256),
+				g: Math.floor(Math.random()*256),
+				b: Math.floor(Math.random()*256)
+			}
+			paths[2].setAttribute('fill',`rgb(${color.r}, ${color.g}, ${color.b})`);
+			paths[3].setAttribute('fill',`rgb(${color.r}, ${color.g}, ${color.b})`);
+			body.style.backgroundColor= `rgb(${(256-color.r)/5}, ${(256-color.g)/5}, ${(256-color.b)/5})`;
+			body.appendChild(img);
+			startTransition(img);
+			
+		})
+	</script>
+</body>
+</html>

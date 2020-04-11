@@ -1,0 +1,33 @@
+<svg width="100vh" height="100vh" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
+	 style="background-color: black;">
+	 <circle cx="50" cy="10" r="2.5" fill="#EFCA06"/>
+	<path stroke="#EFCA06" stroke-width="0.1" fill="transparent" d="M 42 2 q 4 2, 8 8 q 4 -6, 8 -8 "/>
+	<path  fill="#CCCCCC" d="M 50 13 c 0 0, 14 -14, 20 -10 s 8 10, 8 20 s -8 20,-8 20 c 0 0, 8 12, 2 16 s -22 -16, -22 -16">
+		<animate attributeName="d" dur="0.4s" repeatCount='indefinite'
+		values=
+		"M 50 13 c 0 0, 14 -14, 20 -10 s 8 10, 8 20 s -8 20,-8 20 c 0 0, 8 12, 2 16 s -22 -16, -22 -16;
+		M 50 13 c 0 0, 7 -14, 10 -10 s 4 10, 4 20 s -4 20,-4 20 c 0 0, 4 12, 1 16 s -11 -16, -11 -16;
+		M 50 13 c 0 0, 3.5 -14, 5 -10 s 2 10, 2 20 s -2 20,-2 20 c 0 0, 2 12, 0.5 16 s -5.5 -16, -5.5 -16;
+		M 50 13 c 0 0, 14 -14, 20 -10 s 8 10, 8 20 s -8 20,-8 20 c 0 0, 8 12, 2 16 s -22 -16, -22 -16;
+		M 50 13 c 0 0, 7 -14, 10 -10 s 4 10, 4 20 s -4 20,-4 20 c 0 0, 4 12, 1 16 s -11 -16, -11 -16;
+		M 50 13 c 0 0, 14 -14, 20 -10 s 8 10, 8 20 s -8 20,-8 20 c 0 0, 8 12, 2 16 s -22 -16, -22 -16;"
+		/>
+		<animate attributeName="fill" dur="0.4s" repeatCount="indefinite"
+		values="#CCCCCC; #BBBBBB; #AAAAAA; #CCCCCC; #DDDDDD; #CCCCCC" />
+	</path>
+	<path  fill="#CCCCCC" d="M 50 13 c 0 0, -14 -14, -20 -10 s -8 10, -8 20 s 8 20,8 20 c 0 0, -8 12, -2 16 s 22 -16, 22 -16">
+		<animate attributeName="d" dur="0.4s" repeatCount='indefinite'
+		values=
+		"M 50 13 c 0 0, -14 -14, -20 -10 s -8 10, -8 20 s 8 20,8 20 c 0 0, -8 12, -2 16 s 22 -16, 22 -16;
+		M 50 13 c 0 0, -7 -14, -10 -10 s -4 10, -4 20 s 4 20,4 20 c 0 0, -4 12, -1 16 s 11 -16, 11 -16;
+		M 50 13 c 0 0, -3.5 -14, -5 -10 s -2 10, -2 20 s 2 20,2 20 c 0 0, -2 12, -0.5 16 s 5.5 -16, 5.5 -16;
+		M 50 13 c 0 0, -14 -14, -20 -10 s -8 10, -8 20 s 8 20,8 20 c 0 0, -8 12, -2 16 s 22 -16, 22 -16;
+		M 50 13 c 0 0, -7 -14, -10 -10 s -4 10, -4 20 s 4 20,4 20 c 0 0, -4 12, -1 16 s 11 -16, 11 -16;
+		M 50 13 c 0 0, -14 -14, -20 -10 s -8 10, -8 20 s 8 20,8 20 c 0 0, -8 12, -2 16 s 22 -16, 22 -16"
+		/>
+		<animate attributeName="fill" dur="0.4s" repeatCount="indefinite"
+		values="#CCCCCC; #BBBBBB; #AAAAAA; #CCCCCC; #DDDDDD; #CCCCCC" />
+	</path>
+	<ellipse cx="50" cy="28" rx="1" ry="18" fill="#EFCA06"/>
+</svg>
+

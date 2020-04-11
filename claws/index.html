@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>random lines</title>
+	<style type="text/css">
+		body{
+			margin: 0;
+			height: 100vh;
+			width: 100vw;
+			overflow: hidden;
+			background-color: black;
+		}
+		div{
+			position: relative;
+			visibility: hidden;
+			transform-origin: left;
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<svg width="60vh" height="60vh" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
+			 style="background-color: black;">
+			<path stroke-width="0" fill='white'
+			d="M10 50
+			   A 100 10 0 0 1 90 50
+			   A 100 10 0 0 1 10 50"
+			/>
+			<path stroke-width="0" fill='white'
+			d="M10 30
+			   A 100 10 0 0 1 90 30
+			   A 100 10 0 0 1 10 30"
+			/>
+			<path stroke-width="0" fill='white'
+			d="M10 70
+			   A 100 10 0 0 1 90 70
+			   A 100 10 0 0 1 10 70"
+			/>
+			<path stroke-width='0' fill='black' d="M 10 25 V 75 H 90 V 25 H 10">
+				<animate attributeName="d" dur="0.2s" repeatCount='1'
+				values="M 10 25 V 75 H 90 V 25 H 10;M 50 25 V 75 H 90 V 25 H 50; M 90 25 V 75 H 90 V 25 H 90; M 90 25 V 75 H 90 V 25 H 90"
+				keyTimes="0; 0.25; 0.5; 1"/>
+			</path>
+		</svg>
+	</div>
+	<script type="text/javascript">
+		let lastUpdated=Date.now();
+		let loadTime;
+		window.onload=()=>{
+			loadTime=Date.now();
+		}
+		const div=document.querySelector('div');
+		function addClaw(angle,posTime){
+			if(posTime.time-lastUpdated>600){
+				lastUpdated=posTime.time;
+				div.style.top=posTime.y+'px';
+				div.style.left=posTime.x+'px';
+				div.style.visibility='visible';
+				const rad=angle*Math.PI/180;
+				const transform=`translate(-50%,-50%) rotate(${360-angle}deg) `;
+				div.lastElementChild.style.transform=transform;
+				div.lastElementChild.lastElementChild.lastElementChild.setAttribute('begin',`${Date.now()-loadTime}ms`);
+				setTimeout(()=>{
+					div.style.visibility='hidden';
+				},500);
+			}
+		}
+	</script>
+	<script type="text/javascript">
+		const body=document.querySelector('body');
+		let mousedown=true;
+		let posTime={
+			x: undefined,
+			y: undefined,
+			time: undefined
+		}
+		// body.addEventListener('mousedown',()=>{
+		// 	mousedown=true;
+		// 	console.log('mousedown');
+		// });
+		// body.addEventListener('mouseup',()=>{
+		// 	mousedown=false;
+		// 	console.log('mouseup');
+		// });
+		body.addEventListener('mousemove',(e)=>{
+			if(mousedown){
+				if(posTime.x==undefined){
+					posTime.x=e.clientX;
+					posTime.y=e.clientY;
+					posTime.time=Date.now();
+				}
+				else{
+					const newPosTime={
+						x: e.clientX,
+						y: e.clientY,
+						time: Date.now()
+					}
+					const speed=Math.hypot((newPosTime.x-posTime.x),(newPosTime.y-posTime.y))/(newPosTime.time-posTime.time);
+					if(speed>5){
+						const dx=newPosTime.x-posTime.x;
+						const dy=-(newPosTime.y-posTime.y);
+						const tanangle=Math.atan(dy/dx)*180/Math.PI;
+						let angle;
+						if(dx<0 && dy<0)
+							angle=360-(180-tanangle);
+						else if(dx<0 && dy>0)
+							angle=180+tanangle;
+						else if(dx>0 && dy<0)
+							angle=360+tanangle;
+						else
+							angle=tanangle;
+						addClaw(angle,newPosTime);
+					}
+					posTime=newPosTime;
+				}
+			}
+		})
+	</script>
+</body>
+</html>
+
+

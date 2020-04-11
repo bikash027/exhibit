@@ -1,0 +1,13 @@
+<svg width="30vh" height="30vh" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
+	 style="background-color:#504f75;">
+	<path stroke-width="0" fill='white'
+	d="M50 10
+	   A 10 100 0 0 1 50 90
+	   A 10 100 0 0 1 50 10"
+	/>
+	<path stroke-width='0' fill='#504f75' d="M 45 10 H 55 V 90 H 45 V 10">
+		<animate attributeName="d" dur="0.2s" repeatCount='1'
+		values="M 45 10 H 55 V 90 H 45 V 10;M 45 50 H 55 V 90 H 45 V 50; M 45 90 H 55 V 90 H 45 V 90; M 45 90 H 55 V 90 H 45 V 90"
+		keyTimes="0; 0.25; 0.5; 1"/>
+	</path>
+</svg>
