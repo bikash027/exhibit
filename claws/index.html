@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>random lines</title>
+	<title>claws</title>
 	<style type="text/css">
 		body{
 			margin: 0;
@@ -68,22 +68,14 @@
 	</script>
 	<script type="text/javascript">
 		const body=document.querySelector('body');
-		let mousedown=true;
+		let touchdown=true;
 		let posTime={
 			x: undefined,
 			y: undefined,
 			time: undefined
 		}
-		// body.addEventListener('mousedown',()=>{
-		// 	mousedown=true;
-		// 	console.log('mousedown');
-		// });
-		// body.addEventListener('mouseup',()=>{
-		// 	mousedown=false;
-		// 	console.log('mouseup');
-		// });
-		body.addEventListener('mousemove',(e)=>{
-			if(mousedown){
+		const handler= (e)=>{
+			if(touchdown){
 				if(posTime.x==undefined){
 					posTime.x=e.clientX;
 					posTime.y=e.clientY;
@@ -114,7 +106,18 @@
 					posTime=newPosTime;
 				}
 			}
-		})
+		}
+		body.addEventListener('touchstart',()=>{
+			touchdown=true;
+			console.log('mousedown');
+		});
+		body.addEventListener('touchend',()=>{
+			touchdown=false;
+			console.log('mouseup');
+		});
+		body.addEventListener('mousemove',handler);
+		body.addEventListener('touchmove',handler);
+		
 	</script>
 </body>
 </html>
