@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <style type="text/css">
+    #canvas{
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+ </head>
+ <body>
+   <canvas id="canvas" width="150" height="150"></canvas>
+   <script type="application/javascript">
+      var canvas = document.querySelector('canvas');
+      var context = canvas.getContext('2d');
+
+      var size = window.innerHeight-16;
+      var dpr = window.devicePixelRatio;
+      canvas.width = size * dpr;
+      canvas.height = size * dpr;
+      context.scale(dpr, dpr);
+      context.fillStyle = '#12233f';
+      context.strokeStyle = '#e21d6c';
+      context.fillRect(0, 0, size, size);
+
+      let tree = function(){}
+
+      function spiral(b, theta){
+        if(theta <= 0){
+          //restore states to the very beginning. #35577a, #c22b70, #e7f0ef,     12233f, e21d6c, f9feff
+          context.restore();
+          return;
+        }
+        const radians = (theta*Math.PI)/180;
+        context.beginPath();
+        let x = b*theta*Math.cos(radians);
+        let y = b*theta*Math.sin(radians);
+        context.moveTo(x, y);
+        const temp = theta%360;
+        if(temp<=90){
+          x = x + 1.5*Math.cos((90-temp)*Math.PI/180);
+          y = y - 1.5*Math.sin((90-temp)*Math.PI/180);
+        }
+        else if(temp<=180){
+          x = x + 1.5*Math.cos((temp-90)*Math.PI/180);
+          y = y + 1.5*Math.sin((temp-90)*Math.PI/180);
+        }
+        else if(temp<=270){
+          x = x - 1.5*Math.cos((270-temp)*Math.PI/180);
+          y = y + 1.5*Math.sin((270-temp)*Math.PI/180);
+        }
+        else{
+          x = x - 1.5*Math.cos((temp-270)*Math.PI/180);
+          y = y - 1.5*Math.sin((temp-270)*Math.PI/180);
+        }
+        theta = theta - 750/theta;
+        if(context.lineWidth > 1)
+          context.lineWidth = context.lineWidth - 2/141;
+        context.lineTo(x, y);
+        context.stroke();
+        window.requestAnimationFrame(()=>{spiral(b, theta);});
+      }
+
+      function shaft(height){
+        if(height >= 0){
+          window.requestAnimationFrame(()=>{spiral(10/126, 1260);});
+          return;
+        }
+        context.beginPath();
+        context.moveTo(-100, height);
+        height+=2;
+        context.lineWidth = context.lineWidth - 2/141;
+        context.lineTo(-100, height+1);
+        context.stroke();
+        window.requestAnimationFrame(()=>{shaft(height);});
+      }
+
+      tree = function(){
+        context.save();
+        const origin = {
+          x: 100 + Math.random()*(size - 200),
+          y: 100 + Math.random()*(size - 200)
+        }
+        context.translate(origin.x, origin.y);
+        const scaleFactor = 0.5 + Math.random()*0.5;
+        let flip = Math.floor(Math.random()*2);
+        if(flip === 0)
+          flip = -1;
+        context.scale(flip*scaleFactor, -scaleFactor);
+        context.lineWidth = 21;
+        window.requestAnimationFrame(()=>{shaft(-151);});
+      }
+      const canvasPos = canvas.getBoundingClientRect();
+      canvas.addEventListener('click', (e)=>{
+        const x = e.clientX - canvasPos.x;
+        const y = e.clientY - canvasPos.y;
+        context.save();
+        context.translate(x, y);
+        let flip = Math.floor(Math.random()*2);
+        if(flip === 0)
+          flip = -1;
+        context.scale(flip*y/640, -y/640);
+        context.translate(100, 151);
+        context.lineWidth = 21;
+        flip = Math.floor(Math.random()*2);
+        if(flip === 0)
+          context.strokeStyle = '#f9feff';
+        window.requestAnimationFrame(()=>{shaft(-151);});
+      })
+
+    </script>
+ </body>
+</html>
