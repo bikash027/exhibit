@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <style>
+            body{
+                margin: 0;
+            }
+            #main{
+                height: 100vh;
+                width: 100vw;
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+            }
+            /* #canvas{
+                vertical-align: middle;
+
+            } */
+        </style>
+    </head>
+    <body>
+        <div id = "main">
+            <svg id = "canvas" width="500" height="500" xmlns="http://www.w3.org/2000/svg">
+                <path d = "M 10 10 L 490 10 L 490 490 L 10 490 L 10 10" stroke = "black" fill = "transparent"/>
+                <path id = "curve" d = "" stroke = "black" fill = "black"/>
+            </svg>
+        </div>
+        <script src="./index.js"></script>
+    </body>
+</html>
