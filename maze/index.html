@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <title>Maze</title>
+        <link rel="stylesheet" type="text/css" href="index.file.css" /> 
+        <script type="importmap">
+            {
+              "imports": {
+                "three": "https://unpkg.com/three@latest/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@latest/examples/jsm/"
+              }
+            }
+        </script>
+    </head>
+    <body>
+        <div id="main">
+            <canvas id="canvas"></canvas>
+        </div>
+        <div id="playButtonContainer">
+            <p id="playButton">Play</p>
+            <p>
+                WASD / ARROWS - Move
+                <br />
+                ESC - Menu
+            </p>
+        </div>
+        <script type="module" src="index.js"></script>
+    </body>
+</html>
