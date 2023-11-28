@@ -1,0 +1,41 @@
+body{
+    margin: 0;
+    background-color: #f6fffe;
+}
+
+#main{
+    width: 75vh;
+    min-height: 100vh;
+    margin: 0 auto;
+    background-color: white;
+}
+
+#nameDesignation{
+    height: 18vh;
+    text-align: center;
+}
+
+#content{
+    display: flex;
+}
+#contentLeft{
+    width: 30vh;
+    min-height: 78vh;
+    background-color:  #ffdfdf;
+}
+#contentRight{
+    width: 42vh;
+}
+
+.icons{
+    width: .875rem;
+}
+
+.contactDetails{
+    display: flex;
+}
+
+.experienceDetails ul{
+    margin: 0;
+    padding-right: 0;
+}
