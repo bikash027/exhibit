@@ -19,13 +19,15 @@ body{
     display: flex;
 }
 #contentLeft{
-    width: 30vh;
+    width: 32vh;
     min-height: 78vh;
-    background-color:  #ffdfdf;
+    background-color:  #f4ebe9;
+    display: flex;
+    flex-direction: column;
 }
-#contentRight{
+/* #contentRight{
     width: 42vh;
-}
+} */
 
 .icons{
     width: .875rem;
@@ -35,7 +37,13 @@ body{
     display: flex;
 }
 
-.experienceDetails ul{
+.experienceDetails ul, .personalProjects ul{
     margin: 0;
     padding-right: 0;
+}
+
+#keywords{
+    font-size: 0.4rem;
+    color: #cccccc;
+    margin-top: auto;
 }
