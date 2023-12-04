@@ -19,14 +19,14 @@ body{
     display: flex;
 }
 #contentLeft{
-    width: 32vh;
+    width: 30vh;
     min-height: 78vh;
     background-color:  #f4ebe9;
     display: flex;
     flex-direction: column;
 }
 /* #contentRight{
-    width: 42vh;
+    width: 40vh;
 } */
 
 .icons{
