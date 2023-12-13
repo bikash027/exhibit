@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import { maze, mazeHash } from './maze.js';
+RectAreaLightUniformsLib.init();
 
 const canvas = document.querySelector('#canvas');
 const renderer = new THREE.WebGLRenderer({antialias: true, canvas});
@@ -11,76 +14,50 @@ const aspect = window.innerWidth / window.innerHeight;  // the canvas default
 const near = 0.1;
 const far = 100;
 const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-camera.position.set(0, 0.3, -0.75);
-camera.lookAt(new THREE.Vector3(1,0.1,0));
+camera.position.set(0, 1.3, -0.75);
+camera.lookAt(new THREE.Vector3(1,1,0));
 const scene = new THREE.Scene();
 const controls = new PointerLockControls(camera, document.body);
 
 const loadManager = new THREE.LoadingManager()
 const loader = new THREE.CubeTextureLoader(loadManager);
-const backgroundTexture = loader.load([
-    './resources/images/cubemaps/skyboxsun/px.jpg',
-    './resources/images/cubemaps/skyboxsun/nx.jpg',
-    './resources/images/cubemaps/skyboxsun/py.jpg',
-    './resources/images/cubemaps/skyboxsun/ny.jpg',
-    './resources/images/cubemaps/skyboxsun/pz.jpg',
-    './resources/images/cubemaps/skyboxsun/nz.jpg'
-]);
+// const backgroundTexture = loader.load([
+//     './resources/images/cubemaps/skyboxsun/px.jpg',
+//     './resources/images/cubemaps/skyboxsun/nx.jpg',
+//     './resources/images/cubemaps/skyboxsun/py.jpg',
+//     './resources/images/cubemaps/skyboxsun/ny.jpg',
+//     './resources/images/cubemaps/skyboxsun/pz.jpg',
+//     './resources/images/cubemaps/skyboxsun/nz.jpg'
+// ]);
 
-scene.background = backgroundTexture;
+// scene.background = backgroundTexture;
 
-const color = 0xFFFFFF;
-const intensity = 0.5;
-const light = new THREE.AmbientLight(color, intensity);
-scene.add(light);
+// const color = 0xFFFFFF;
+// const intensity = 0.5;
+// const light = new THREE.AmbientLight(color, intensity);
+// scene.add(light);
 
 
-const sunLight = new THREE.DirectionalLight('#e5dfd5', 1);
-sunLight.position.set(-Math.sin(Math.PI/4), Math.sin(25*Math.PI/180), -Math.sin(Math.PI/4));
-scene.add(sunLight);
+// const sunLight = new THREE.DirectionalLight('#e5dfd5', 1);
+// sunLight.position.set(-Math.sin(Math.PI/4), Math.sin(25*Math.PI/180), -Math.sin(Math.PI/4));
+// scene.add(sunLight);
 
 // scene.fog = new THREE.Fog(0xc2b69e, near, 30);
 // const pmremGenerator = new THREE.PMREMGenerator(renderer);
 // const pmrem = pmremGenerator.fromScene(scene);
 
+const rectLight = new THREE.RectAreaLight('#ffffff', 0.8, 36, 22);
+rectLight.rotation.x = Math.PI / 2;
+rectLight.position.set(15.5,0,8.5);
+scene.add(rectLight);
+scene.add(new RectAreaLightHelper(rectLight));
+
+
 
 
 
 const textureLoader = new THREE.TextureLoader(loadManager);
-// const bumpMapGround = textureLoader.load('./resources/images/textures/park_dirt_disp_1k.png');
-// const roughMapGround = textureLoader.load('./resources/images/textures/brown_mud_leaves_01_rough_1k.png');
-// bumpMapGround.wrapS = THREE.RepeatWrapping;
-// roughMapGround.wrapS = THREE.RepeatWrapping;
-// bumpMapGround.wrapT = THREE.RepeatWrapping;
-// roughMapGround.wrapT = THREE.RepeatWrapping;
-// bumpMapGround.repeat.set(60, 60);
-// roughMapGround.repeat.set(34, 20);
-// const groundMaterial = new THREE.MeshStandardMaterial({
-//     color: '#d7cbb1',//'#736c2c', //'#736a45', //'#ada083', // #d7cbb1
-//     side: THREE.FrontSide,
-//     // displacementMap: bumpMapGround,
-//     // roughnessMap: roughMapGround,
-//     roughness: 1,
-//     envMap: backgroundTexture
-// });
 
-
-const diffuseMap = textureLoader.load('./resources/images/textures/brick_wall_005_diff_1k.png');
-// const roughMap = textureLoader.load('./resources/images/textures/mossy_stone_wall_rough_1k.png');
-const normalMap = textureLoader.load('./resources/images/textures/brick_wall_005_nor_gl_1k.png');
-// const dispMap = textureLoader.load('./resources/images/textures/brick_wall_005_disp_1k.png');
-diffuseMap.wrapS = THREE.RepeatWrapping;
-// dispMap.wrapS = THREE.RepeatWrapping;
-// roughMap.wrapS = THREE.RepeatWrapping;
-normalMap.wrapS = THREE.RepeatWrapping;
-diffuseMap.center.set(0.5, 0.5);
-// dispMap.center.set(0.5, 0.5);
-// roughMap.center.set(0.5, 0.5);
-normalMap.center.set(0.5, 0.5);
-diffuseMap.rotation = Math.PI;
-// dispMap.rotation = Math.PI;
-// roughMap.rotation = Math.PI;
-normalMap.rotation = Math.PI;
 
 const playButton = document.getElementById('playButton');
 loadManager.onLoad = () => {
@@ -93,60 +70,94 @@ loadManager.onLoad = () => {
     // planeMesh.position.set(16,0,9);
 
     // scene.add(planeMesh);
-    const baseWallMaterial = new THREE.MeshStandardMaterial({
-        map: diffuseMap,
-        normalMap: normalMap,
-        envMap: backgroundTexture,
-        roughness: 1
-    });
-    maze.forEach((row, rowNum) =>{
-        for(const block of row){
-            const bushGeometry = new THREE.BoxGeometry(block[1] - block[0], 0.6, 1);
-            const materials = [];
-            //px
-            materials.push(baseWallMaterial);
-            //nx
-            materials.push(baseWallMaterial);
-            //py
-            materials.push(null);
-            //ny
-            materials.push(null);
-            //pz
-            const diffuseMapClone = diffuseMap.clone();
-            diffuseMapClone.repeat.set(block[1] - block[0], 1);
-            // const roughMapClone = roughMap.clone();
-            // roughMapClone.repeat.set(block[1] - block[0], 1);
-            const normalMapClone = normalMap.clone();
-            normalMapClone.repeat.set(block[1] - block[0], 1);
-            // const dispMapClone = dispMap.clone();
-            // dispMapClone.repeat.set(block[1] - block[0], 1);
-            const clonedWallMaterial = new THREE.MeshStandardMaterial({
-                map: diffuseMapClone,
-                normalMap: normalMapClone,
-                envMap: backgroundTexture,
-                roughness: 1
-            })
-            materials.push(clonedWallMaterial);
-            //nz
-            materials.push(clonedWallMaterial);
-            diffuseMapClone.needsUpdate = true;
-            normalMapClone.needsUpdate = true;
-            // const bushMaterial = new THREE.MeshStandardMaterial({
-            //     map: diffuseMap,
-            //     roughnessMap: roughMap
-            // });
-            const bushMesh = new THREE.Mesh(bushGeometry, materials);
-            const centerX = (block[0] + block[1])/2;
-            const centerY = 0.3;
-            const centerZ = rowNum + 0.5;
-            bushMesh.position.set(centerX, centerY, centerZ);
-            scene.add(bushMesh);
-        }
-    })
-    playButton.addEventListener('click', () => {
-        controls.lock();
-    })
 }
+
+const mazeMaterial = new THREE.MeshStandardMaterial({
+    color: 0xbcbcbc,
+    roughness: 0.1,
+    metalness: 0
+});
+maze.forEach((row, rowNum) =>{
+    for(const block of row){
+        const bushGeometry = new THREE.BoxGeometry(block[1] - block[0], 0.6, 1);
+        // const materials = [];
+        // //px
+        // materials.push(baseWallMaterial);
+        // //nx
+        // materials.push(baseWallMaterial);
+        // //py
+        // materials.push(null);
+        // //ny
+        // materials.push(null);
+        // //pz
+        // const diffuseMapClone = diffuseMap.clone();
+        // diffuseMapClone.repeat.set(block[1] - block[0], 1);
+        // // const roughMapClone = roughMap.clone();
+        // // roughMapClone.repeat.set(block[1] - block[0], 1);
+        // const normalMapClone = normalMap.clone();
+        // normalMapClone.repeat.set(block[1] - block[0], 1);
+        // // const dispMapClone = dispMap.clone();
+        // // dispMapClone.repeat.set(block[1] - block[0], 1);
+        // const clonedWallMaterial = new THREE.MeshStandardMaterial({
+        //     map: diffuseMapClone,
+        //     normalMap: normalMapClone,
+        //     envMap: backgroundTexture,
+        //     roughness: 1
+        // })
+        // materials.push(clonedWallMaterial);
+        // //nz
+        // materials.push(clonedWallMaterial);
+        // diffuseMapClone.needsUpdate = true;
+        // normalMapClone.needsUpdate = true;
+        // const bushMaterial = new THREE.MeshStandardMaterial({
+        //     map: diffuseMap,
+        //     roughnessMap: roughMap
+        // });
+        const bushMesh = new THREE.Mesh(bushGeometry, mazeMaterial);
+        const centerX = (block[0] + block[1])/2;
+        const centerY = 0.3;
+        const centerZ = rowNum + 0.5;
+        bushMesh.position.set(centerX, centerY, centerZ);
+        scene.add(bushMesh);
+    }
+})
+// boundary
+const planeMaterial = new THREE.MeshStandardMaterial({
+    side: THREE.BackSide,
+    color: 0xffffff,
+    roughness: 1,
+    metalness: 0
+})
+const roomGeometry = new THREE.BoxGeometry(35, 3.2, 21);
+const entryMaterial = new THREE.MeshStandardMaterial({
+    side: THREE.BackSide,
+    color: 0x20bc20,
+    roughness: 0.1,
+    metalness: 0
+})
+const exitMaterial = new THREE.MeshStandardMaterial({
+    side: THREE.BackSide,
+    color: 0xbc2020,
+    roughness: 0.1,
+    metalness: 0
+})
+const materials = [
+    exitMaterial, //px
+    entryMaterial, //nx
+    planeMaterial, //py
+    null, //ny
+    exitMaterial, //pz
+    entryMaterial //nz
+]
+
+const room = new THREE.Mesh(roomGeometry, materials);
+room.position.set(15.5, 1.5, 8.5);
+scene.add(room);
+
+
+playButton.addEventListener('click', () => {
+    controls.lock();
+})
 
 controls.addEventListener('lock', () => {
     playButton.parentElement.style.display = 'none';
@@ -209,10 +220,10 @@ document.addEventListener('keyup', onKeyUp);
 
 const checkCollision = (position) => {
     if(
-        !(0 <= position.x && position.x < 31) ||
-        !(0 <= position.z && position.z < 17)
+        (-1.5 >= position.x || position.x >= 32.5) ||
+        (-1.5 >= position.z || position.z >= 18.5)
     ){
-        return false;
+        return true;
     }
     const deltaArr = [-0.12, 0, 0.12];
     const possibilities = [];
@@ -232,7 +243,7 @@ function render(time) {
     time *= 0.001;  // convert time to seconds
    
     if (controls.isLocked) {
-        const delta = 0.02;
+        const delta = 0.03;
 
         if (moveForward) {
             controls.moveForward(delta);
