@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 2</title>
+    <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+    <!-- <link rel="stylesheet" href="tachyons.min.css"> -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="border-box">
+    <div id="form" class="f3 pa4">
+        <div id="inputContainer">
+            <div>Low: <input id="lowInput" type="number" value="2"/></div>
+            <div>High: <input id="highInput" type="number" value="100"/></div>
+        </div>
+        <div id="findPrimesContainer" class="pa3">
+            <button id="findPrimes" class="dim ph3 pv2 mb2 dib white bg-black ttu">Find primes</button>
+        </div>
+        <hr>
+    </div>
+    <div id="resultMain" class="f3 pa4">
+        <p>Total time taken: <span id="res2a"></span> ms</p>
+        <p>Average time taken to check if a number is prime:</p>
+        <ul>
+            <li>All numbers: <span id="res2dAll"></span> ms</li>
+            <li>Only prime numbers: <span id="res2dPrimes"></span> ms</li>
+        </ul>
+        <button id="showDetails" class="dim ph3 pv2 mb2 dib white bg-black ttu">Show Details</button>
+    </div>
+    <div id="resultDetailsContainer">
+        <div id="resultDetails" class="pa4">
+            <div id="closeDetails" class="pa3">
+                <button class="dim ph3 pv2 mb2 dib white bg-black ttu">close</button>
+            </div>
+            <table id="res2b" class="w-100 mw8 center" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th class="bb b--black-20 tl pb3 pr3 bg-white">Number</th>
+                        <th class="bb b--black-20 tl pb3 pr3 bg-white">Result</th>
+                        <th class="bb b--black-20 tl pb3 pr3 bg-white">Time in ms</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <br>
+            <hr>
+            <br>
+            <table id="res2c" class="w-100 mw8 center" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th class="bb b--black-20 tl pb3 pr3 bg-white">Prime Number</th>
+                        <th class="bb b--black-20 tl pb3 pr3 bg-white">Time in ms</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="index.js" type="module"></script>
+</body>
+</html>
