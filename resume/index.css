@@ -1,6 +1,6 @@
 body{
     margin: 0;
-    background-color: #f6fffe;
+    background-color: #f4ebe9;
 }
 
 #main{
@@ -21,7 +21,7 @@ body{
 #contentLeft{
     width: 30vh;
     min-height: 78vh;
-    background-color:  #f4ebe9;
+    background-color:  #f6fffe;
     display: flex;
     flex-direction: column;
 }
