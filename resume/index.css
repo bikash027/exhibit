@@ -19,8 +19,8 @@ body{
     display: flex;
 }
 #contentLeft{
-    width: 30vh;
-    min-height: 78vh;
+    width: 25vh;
+    min-height: 100vh;
     background-color:  #f6fffe;
     display: flex;
     flex-direction: column;
@@ -46,4 +46,9 @@ body{
     font-size: 0.4rem;
     color: #cccccc;
     margin-top: auto;
+}
+
+.company, .projectDetails{
+    display: flex;
+    justify-content: space-between;
 }
