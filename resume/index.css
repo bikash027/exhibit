@@ -4,7 +4,7 @@ body{
 }
 
 #main{
-    width: 75vh;
+    width: 100vh;
     min-height: 100vh;
     margin: 0 auto;
     background-color: white;
@@ -19,11 +19,12 @@ body{
     display: flex;
 }
 #contentLeft{
-    width: 25vh;
+    width: 30vh;
     min-height: 100vh;
     background-color:  #f6fffe;
     display: flex;
     flex-direction: column;
+    flex: 1 0 auto;
 }
 /* #contentRight{
     width: 40vh;
