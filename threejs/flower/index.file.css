@@ -3,5 +3,7 @@ body {
 }
 
 #canvas{
-    background-color: #46859e;
+    background-color: #143948;
+    min-height: 100vh;
+    min-width: 100vw;
 }
