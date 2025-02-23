@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0 0;
+            background-color: #5c5c5c;
+        }
+        #main{
+            width: 50vw;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+        /* #main img{
+            width: 100%;
+        } */
+        .imagePiece{
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <div id = "main">
+        <!-- <img src="seal.png" alt=""> -->
+    </div>
+    <script>
+        const pieceWidth = 50;
+        const pieceHeight = 50;
+        const grayCanvas = document.createElement('canvas');
+        {
+            grayCanvas.width = pieceWidth;
+            grayCanvas.height = pieceHeight;
+            const context = grayCanvas.getContext('2d');
+            context.fillStyle = '#5c5c5c'
+            context.fillRect(0, 0, pieceWidth, pieceHeight);
+        }
+        const grayBoxSrc = grayCanvas.toDataURL();
+        const main = document.getElementById('main');
+        const computedStyle = window.getComputedStyle(main);
+        const image = new Image();
+        image.src = 'seal.png';
+        const pieces = [];
+        image.onload = () => {
+            // main.appendChild(image);
+            const style = window.getComputedStyle(main);
+            const width = (parseInt(computedStyle.getPropertyValue('width')) - 50);
+            const height = (image.naturalHeight/image.naturalWidth) * width;
+            const colCount = Math.ceil(width / pieceWidth);
+            const rowCount = Math.ceil(height/pieceHeight);
+            const naturalWidth = image.naturalWidth / colCount;
+            const naturalHeight = image.naturalHeight / rowCount;
+            for(let y=0; y < rowCount; y++){
+                for(let x = 0; x < colCount; x++){
+                    const canvas = document.createElement('canvas');
+                    canvas.width = pieceWidth;
+                    canvas.height = pieceHeight;
+                    const context = canvas.getContext('2d');
+                    context.drawImage(image, x*naturalWidth, y*naturalHeight, naturalWidth, naturalHeight, 0, 0, canvas.width, canvas.height);
+                    const imagePiece = new Image(pieceWidth, pieceHeight);
+                    imagePiece.setAttribute('crossOrigin', 'anonymous');
+                    const src = canvas.toDataURL();
+                    imagePiece.src = src
+                    imagePiece.classList.add('imagePiece')
+                    main.appendChild(imagePiece);
+                    pieces.push({
+                        element: imagePiece,
+                        originalSrc: src
+                    });
+                }
+            }
+        }
+        const animate = () => {
+            for(const piece of pieces){
+                const randomNum = parseInt(Math.random()*3);
+                if(randomNum == 0){
+                    piece.element.src = piece.originalSrc;
+                } else {
+                    piece.element.src = grayBoxSrc;
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+        
+    </script>
+</body>
+</html>
